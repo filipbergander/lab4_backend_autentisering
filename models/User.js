@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true
+    },
     password: {
         type: String,
         required: true
@@ -32,9 +38,9 @@ userSchema.pre("save", async function() {
 });
 
 // Registrera ny användare
-userSchema.statics.register = async function(username, password) {
+userSchema.statics.register = async function(username, email, password) {
     try {
-        const user = new this({ username, password });
+        const user = new this({ username, email, password });
         await user.save();
         return user;
     } catch (error) {
@@ -52,20 +58,20 @@ userSchema.methods.comparePassword = async function(password) {
 }
 
 // logga in användare
-userSchema.statics.login = async function(username, password) {
+userSchema.statics.login = async function(username, email, password) {
     try {
         const user = await this.findOne({ username });
 
         // Om den inte hittar en användare
         if (!user) {
-            throw new Error("Felaktigt användarnamn eller lösenord!");
+            throw new Error("Felaktigt användarnamn, mejl eller lösenord!");
         }
 
         const isPasswordMatch = await user.comparePassword(password);
 
         // Vid inkorrekt angivet lösenord
         if (!isPasswordMatch) {
-            throw new Error("Felaktigt användarnamn eller lösenord!")
+            throw new Error("Felaktigt användarnamn, mejl eller lösenord!")
         }
 
         return user;

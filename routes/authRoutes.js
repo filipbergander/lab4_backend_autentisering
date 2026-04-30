@@ -20,15 +20,15 @@ const User = require("../models/User");
 // Route för att lägga till en ny användare
 router.post("/register", async(req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, email, password } = req.body;
 
         // Validera input
-        if (!username || !password) {
-            return res.status(400).json({ error: "Felaktig information angiven. Skicka både användarnamn och lösenord" })
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: "Felaktig information angiven. Skicka användarnamn, mejl och lösenord" })
         }
 
         // Om man angivet både användarnamn och lösenord hamnar man här
-        const user = new User({ username, password }); // Skapar ny användare
+        const user = new User({ username, email, password }); // Skapar ny användare
         await user.save();
         res.status(201).json({ message: "Ny användare skapad!" });
 
@@ -48,21 +48,21 @@ router.post("/login", async(req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Felaktig information angiven. Skicka både användarnamn och lösenord!" });
+            return res.status(400).json({ error: "Felaktig information angiven. Skicka användarnamn, mejl och lösenord!" });
         }
 
 
         // Finns användaren?
         const user = await User.findOne({ username });
         if (!user) {
-            return res.status(401).json({ error: "Inkorrekt användarnamn eller lösenord!" })
+            return res.status(401).json({ error: "Inkorrekt användarnamn, mejl eller lösenord!" })
         }
 
 
         // Se att lösenordet stämmer överens
         const isPasswordMatch = await user.comparePassword(password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ error: "Inkorrekt användarnamn eller lösenord!" })
+            return res.status(401).json({ error: "Inkorrekt användarnamn, mejl eller lösenord!" })
         } else {
             // Skapa jsonwebtoken
             const payload = { username: username };

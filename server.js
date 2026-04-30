@@ -6,6 +6,7 @@ const cors = require('cors'); // För att ansluta till servern från annan domä
 const port = process.env.PORT || 3000; // Portanslutning, antingen via .env eller port 3000
 
 const app = express();
+// Middlewares
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
