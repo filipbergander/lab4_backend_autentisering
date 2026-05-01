@@ -19,9 +19,13 @@ app.use("/api", authRoutes);
 app.get("/", async(req, res) => {
     res.json("Välkommen till webbtjänsten!")
 });
+
 // Skyddad route som kräver autentisering med token
 app.get("/api/protected", authenticateToken, (req, res) => {
-    res.json({ message: "Skyddad route!" });
+    res.json({
+        message: "Skyddad route!",
+        user: req.user
+    });
 });
 
 // Validera token
@@ -29,7 +33,7 @@ function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1] // Andra argumentet tar bort bearer och sedan använder enbart token
 
-    if (token == null) res.status(401).json({ message: "Inte behörighet för denna sida - saknar token!" });
+    if (token == null) return res.status(401).json({ message: "Inte behörighet för denna sida - saknar token!" });
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (error, username) => {
         if (error) return res.status(403).json({ message: "Ogiltig token" });

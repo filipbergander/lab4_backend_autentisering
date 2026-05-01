@@ -37,10 +37,19 @@ router.post("/register", async(req, res) => {
         res.status(201).json({ message: "Ny användare skapad!" });
 
     } catch (error) {
-        console.log("Kan inte registrera ny användare: ", error)
-        res.status(500).json({ error: "Fel på server" });
+        // Felmeddelande när man anger ett redan befintligt användarnamn/mejl (duplicate-error)
+        if (error.code === 11000) {
+            // Om det redan finns ett användarnamn med samma namn
+            if (error.keyPattern.username) {
+                return res.status(400).json({ error: "Användarnamnet finns redan!" })
+            }
+            // Om det redan finns en mejl med samma namn
+            if (error.keyPattern.email) {
+                return res.status(400).json({ error: "Emailen finns redan!" })
+            }
+        }
+        res.status(500).json({ error: "Fel på server vid registrering" });
     }
-    console.log("Kallar på registret...")
 });
 
 // Logga in en användare
@@ -48,7 +57,6 @@ router.post("/login", async(req, res) => {
     try {
         const { username, email, password } = req.body;
         error = {};
-
 
         // Validera input
         if (!username || !email || !password) {
@@ -82,4 +90,5 @@ router.post("/login", async(req, res) => {
     }
     console.log("Inloggning kallad...");
 });
+
 module.exports = router;
