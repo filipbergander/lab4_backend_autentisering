@@ -5,18 +5,14 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require("dotenv").config();
-const authenticateToken = require("../middleware/authToken.js");
-
-// Anslutning mot mongoDB
-mongoose.set("strictQuery", false);
-mongoose.connect(process.env.DATABASE).then(() => {
-    console.log("Ansluten till mongoDB!")
-}).catch((error) => {
-    console.error("Fel vid anslutning mot databasen...");
-});
 
 // Använder user-model
-const User = require("../models/User");
+const User = require("../models/user.js");
+
+// Välkomstmeddelande
+router.get("/", async(req, res) => {
+    res.json("Välkommen till webbtjänsten!")
+});
 
 // Route för att lägga till en ny användare
 router.post("/register", async(req, res) => {
