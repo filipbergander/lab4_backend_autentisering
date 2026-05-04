@@ -76,4 +76,25 @@ router.post("/news", authenticateToken, async(req, res) => {
     }
 });
 
+// Skyddad route för att radera ett nyhetsinlägg
+router.delete("/news/:id", authenticateToken, async(req, res) => {
+    try {
+        let result = await News.findByIdAndDelete(req.params.id);
+
+        // Om det inte finns något ID med det man försöker radera
+        if (!result) return res.status(404).json({ message: "Ange ett ID som finns med i databasen för nyhetsinlägg!" });
+
+        // Om man lyckas med raderingen
+        return res.json({
+            message: "Nyhetsinlägget raderades från databasen",
+            deleted: result
+        });
+    } catch (error) {
+        return res.status(400).json({
+            error: "Fel format på angivet ID",
+            details: error.message
+        });
+    }
+});
+
 module.exports = router;
