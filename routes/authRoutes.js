@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require("dotenv").config();
+const authenticateToken = require("../middleware/authToken.js");
 
 // Anslutning mot mongoDB
 mongoose.set("strictQuery", false);
@@ -55,33 +56,47 @@ router.post("/register", async(req, res) => {
 // Logga in en användare
 router.post("/login", async(req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { email, password } = req.body;
         error = {};
 
         // Validera input
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: "Felaktig information angiven. Skicka användarnamn, mejl och lösenord!" });
+        if (!email || !password) {
+            return res.status(400).json({ error: "Felaktig information angiven. Ange korrekt mejl och lösenord!" });
         }
 
         // Finns användaren redan?
-        const user = await User.findOne({ username, email });
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({ error: "Inkorrekt användarnamn, mejl eller lösenord!" })
+            return res.status(401).json({ error: "Inkorrekt mejl eller lösenord!" })
         }
 
         // Se att lösenordet stämmer överens
         const isPasswordMatch = await user.comparePassword(password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ error: "Inkorrekt användarnamn, mejl eller lösenord!" })
+            return res.status(401).json({ error: "Inkorrekt mejl eller lösenord!" })
         } else {
+
             // Skapa jsonwebtoken
-            const payload = { username: username };
+            const payload = { username: user.username };
             const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-            const response = {
-                message: "Användare inloggad!",
-                token: token
-            }
-            res.status(200).json({ response });
+            const responseMsg = JSON.stringify({ username: user.username, email: user.email });
+            res.status(200).json({
+                response: {
+                    message: "Användare inloggad",
+                    user: {
+                        username: user.username,
+                        email: user.email,
+                        created: {
+                            raw: user.account_created,
+                            formatted: user.account_created.toLocaleString("sv-SE", {
+                                dateStyle: "long",
+                                timeStyle: "short"
+                            })
+                        }
+                    },
+                    token
+                }
+            });
         }
 
     } catch (error) {
