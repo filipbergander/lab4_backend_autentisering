@@ -9,11 +9,6 @@ require("dotenv").config();
 // Använder user-model
 const User = require("../models/user.js");
 
-// Välkomstmeddelande
-router.get("/", async(req, res) => {
-    res.json("Välkommen till webbtjänsten!")
-});
-
 // Route för att lägga till en ny användare
 router.post("/register", async(req, res) => {
     try {

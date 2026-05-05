@@ -26,6 +26,11 @@ const newsRoutes = require('./routes/newsRoutes.js');
 app.use("/api", authRoutes);
 app.use("/api", newsRoutes);
 
+// Välkomstmeddelande
+app.get("/", async(req, res) => {
+    res.json("Välkommen till webbtjänsten!")
+});
+
 // Startar applikationen
 app.listen(port, () => {
     console.log("Servern startade på http://localhost:" + port);
