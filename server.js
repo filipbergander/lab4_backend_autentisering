@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Anslutning mot mongoDB
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.DATABASE).then(() => {
+mongoose.connect(process.env.MONGODB_URI).then(() => {
     console.log("Ansluten till mongoDB!")
 }).catch((error) => {
     console.error("Fel vid anslutning mot databasen...");
