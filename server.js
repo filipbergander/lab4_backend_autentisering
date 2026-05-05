@@ -33,5 +33,6 @@ app.get("/", async(req, res) => {
 
 // Startar applikationen
 app.listen(port, () => {
-    console.log("Servern startade på http://localhost:" + port);
+    console.log("Servern startade på port: " + port);
+    //console.log("Servern startade på http://localhost:" + port);
 });

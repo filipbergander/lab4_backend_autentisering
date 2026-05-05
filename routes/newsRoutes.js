@@ -36,6 +36,7 @@ router.get("/news", async(req, res) => {
         console.log(result);
         return res.json(formattedResult);
     } catch (error) {
+        console.error(error);
         return res.status(500).json({
             message: "Kunde inte hämta nyhetsinlägg från databasen",
             error
