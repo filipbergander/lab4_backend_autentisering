@@ -86,3 +86,5 @@ Ett nyhetsinlägg returneras/skickas som JSON-objekt med följande struktur:
   "account_created": "2026-05-05T07:51:59.522+00:00"
 }
 ```
+
+*Filip Bergander | Laboration 4 - Backend-baserad Webbutveckling - Mittuniversitet 2026*
