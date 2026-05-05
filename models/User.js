@@ -59,20 +59,20 @@ userSchema.methods.comparePassword = async function(password) {
 }
 
 // logga in användare
-userSchema.statics.login = async function(username, email, password) {
+userSchema.statics.login = async function(email, password) {
     try {
-        const user = await this.findOne({ username });
+        const user = await this.findOne({ email });
 
-        // Om den inte hittar en användare
+        // Om den inte hittar en användare genom mejlen
         if (!user) {
-            throw new Error("Felaktigt användarnamn, mejl eller lösenord!");
+            throw new Error("Felaktigt mejl eller lösenord!");
         }
 
         const isPasswordMatch = await user.comparePassword(password);
 
         // Vid inkorrekt angivet lösenord
         if (!isPasswordMatch) {
-            throw new Error("Felaktigt användarnamn, mejl eller lösenord!")
+            throw new Error("Felaktigt mejl eller lösenord!")
         }
 
         return user;

@@ -24,7 +24,9 @@ router.get("/news", async(req, res) => {
                 formatted: row.created.toLocaleString("sv-SE", {
                     dateStyle: "short",
                     timeStyle: "short"
-                })
+                }),
+                date: row.created.toLocaleDateString("sv-SE", { dateStyle: "short" }),
+                time: row.created.toLocaleTimeString("sv-SE", { timeStyle: "short" })
             }
         }));
 
