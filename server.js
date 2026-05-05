@@ -31,6 +31,11 @@ app.get("/", async(req, res) => {
     res.json("Välkommen till webbtjänsten!")
 });
 
+// Route för att vakna upp servern från viloläge, eftersom jag använder render 
+app.get("/ping", (req, res) => {
+    res.status(200).send("Ok, väcker servern...");
+});
+
 // Startar applikationen
 app.listen(port, () => {
     console.log("Servern startade på port: " + port);
