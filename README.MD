@@ -59,6 +59,7 @@ Beskrivning hur man når API:et på olika vis:
 | Metod | Ändpunkt              | Beskrivning                                      |
 |-------|------------------------|--------------------------------------------------|
 | GET   | /                      | Välkomstmeddelande         |
+| GET   | /api                      | Beskrivning av routes som finns        |
 | GET   | /api/news              | Hämtar nyhetsinlägg     |
 | POST  | /api/news              | Skyddad route för att skapa ett nyhetsinlägg      |
 | DELETE   | /api/news/:id       | Skyddad route för att radera ett nyhetsinlägg     |
