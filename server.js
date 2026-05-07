@@ -31,6 +31,24 @@ app.get("/", async(req, res) => {
     res.json("Välkommen till webbtjänsten!")
 });
 
+// Meddelande med endpoints som finns i API:et
+app.get("/api", async(req, res) => {
+    res.json({
+        message: "Välkommen till API:et!",
+        endpoints: {
+            public: {
+                "GET /api/news": "Hämta alla nyheter",
+                "POST /api/register": "Registrera en användare",
+                "POST /api/login": "Logga in en användare"
+            },
+            protected: {
+                "POST /api/news": "Skapa en nyhet (kräver JWT)",
+                "DELETE /api/news/:id": "Radera en nyhet (kräver JWT)"
+            }
+        }
+    });
+});
+
 // Route för att vakna upp servern från viloläge, eftersom jag använder render 
 app.get("/ping", (req, res) => {
     res.status(200).send("Ok, väcker servern...");
